@@ -1,0 +1,47 @@
+export interface Slide {
+  id: number;
+  bg: string;
+  title: string;
+  subtitle?: string;
+  text: string;
+}
+
+export interface PricingPlan {
+  id: number;
+  title: string;
+  price: string;
+  features: string[];
+  icon: 'calc' | 'chart' | 'sand';
+}
+
+export interface GalleryItem {
+  id: number;
+  src: string;
+  full: string;
+  title: string;
+  location: string;
+  size: 'small' | 'tall' | 'wide' | 'big';
+}
+
+export interface FaqItem {
+  id: number;
+  question: string;
+  answer: string;
+  image: string;
+  align: 'left' | 'right';
+}
+
+export interface Contacts {
+  phone1: string;
+  phone2: string;
+  email: string;
+  city: string;
+  hours: string;
+}
+
+export interface RequestFormData {
+  name: string;
+  phone: string;
+  city: string;
+  kvm: string;
+}

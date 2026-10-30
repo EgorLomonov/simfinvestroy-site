@@ -1,0 +1,6 @@
+name = "simfinvestroy-tg-proxy"
+main = "src/index.ts"
+compatibility_date = "2024-09-01"
+
+[vars]
+ALLOWED_ORIGIN = "https://simf-invest-stroy.ru, https://www.simf-invest-stroy.ru, http://localhost:5173"
