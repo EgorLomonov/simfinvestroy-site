@@ -14,7 +14,7 @@ interface HeroSliderProps {
 
 export default function HeroSlider({ onOpenModal }: HeroSliderProps) {
   return (
-    <section className="relative w-full h-[70vh] bg-gray-900">
+    <section className="relative w-full h-[70vh] bg-gray-900 pt-28 md:pt-32">
       <Swiper
         modules={[Autoplay, Pagination, Navigation]}
         spaceBetween={0}

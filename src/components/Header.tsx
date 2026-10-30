@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { contacts } from '../data/contacts';
 
 interface HeaderProps {
@@ -7,6 +7,15 @@ interface HeaderProps {
 
 export default function Header({ onOpenModal }: HeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const links = [
     { href: '#about', label: 'О нас' },
@@ -14,25 +23,43 @@ export default function Header({ onOpenModal }: HeaderProps) {
   ];
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-50">
-      {/* Верхняя полоса с телефонами (desktop) */}
-      <div className="hidden lg:block bg-dark/90 text-white/80">
+    <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+      
+      {/* 1. Верхняя панель (Видна на всех устройствах, адаптирована под мобилки) */}
+      <div className="bg-dark/95 text-white/90 backdrop-blur-md border-b border-white/10">
         <div className="container-site flex items-center justify-between py-2 text-sm">
-          <div className="flex items-center gap-6">
-            <a href={`tel:${contacts.phone1}`} className="hover:text-white">
-              <span className="mr-2">📞</span>{contacts.phone1}
+          
+          {/* Телефоны: на десктопе показываем оба, на мобилке — только иконки */}
+          <div className="flex items-center gap-4">
+            <a href={`tel:${contacts.phone1}`} className="flex items-center gap-2 hover:text-white transition">
+              <span className="text-lg">📞</span>
+              <span className="hidden sm:inline font-bold">{contacts.phone1}</span>
+              <span className="sm:hidden font-bold">Позвонить</span>
             </a>
-            <a href={`tel:${contacts.phone2}`} className="hover:text-white">
-              <span className="mr-2">📞</span>{contacts.phone2}
+            <a href={`tel:${contacts.phone2}`} className="hidden md:flex items-center gap-2 hover:text-white transition">
+              <span className="text-lg">📞</span>
+              <span className="font-bold">{contacts.phone2}</span>
             </a>
           </div>
-          <div>{contacts.hours}</div>
+
+          {/* График работы и кнопка заявки */}
+          <div className="flex items-center gap-4">
+            <span className="hidden md:inline">{contacts.hours}</span>
+            <button
+              onClick={onOpenModal}
+              className="bg-accent hover:bg-accent/80 text-white px-3 py-1 rounded-full text-xs sm:text-sm font-bold transition-colors"
+            >
+              Заявка
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Основной навбар */}
-      <div className="bg-dark/30 backdrop-blur-sm">
-        <div className="container-site flex items-center justify-between py-4">
+      {/* 2. Основная панель с логотипом */}
+      <div className={`transition-all duration-300 ${
+        scrolled ? 'bg-dark/90 shadow-lg backdrop-blur-md' : 'bg-transparent'
+      }`}>
+        <div className="container-site flex items-center justify-between py-3">
           <a href="#" className="flex-shrink-0">
             <img
               src="/images/logo-inverse-310x44.png"
@@ -73,7 +100,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="lg:hidden bg-white shadow-lg">
+        <div className="lg:hidden bg-white shadow-xl absolute top-full left-0 right-0">
           <nav className="container-site flex flex-col py-4 gap-2">
             {links.map((l) => (
               <a
@@ -85,6 +112,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
                 {l.label}
               </a>
             ))}
+            
             <button
               onClick={() => {
                 setMobileOpen(false);
@@ -94,12 +122,6 @@ export default function Header({ onOpenModal }: HeaderProps) {
             >
               Оставить заявку
             </button>
-            <a href={`tel:${contacts.phone1}`} className="text-primary py-2">
-              {contacts.phone1}
-            </a>
-            <a href={`tel:${contacts.phone2}`} className="text-primary py-2">
-              {contacts.phone2}
-            </a>
           </nav>
         </div>
       )}
