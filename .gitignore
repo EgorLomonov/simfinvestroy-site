@@ -27,5 +27,4 @@ dist-ssr
 .env.*.local
 worker/.wrangler
 worker/node_modules
-dist
 node_modules
