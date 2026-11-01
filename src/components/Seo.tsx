@@ -11,8 +11,8 @@ interface SeoProps {
 
 export default function Seo({
   title,
-  description = 'Комплексный ремонт квартир и коммерческих помещений под ключ в Симферополе',
-  canonical,
+  description = 'Комплексный ремонт квартир и коммерческих помещений под ключ. Бесплатный вызов замерщика, гарантия 5 лет, качественные материалы.',
+  canonical="https://simf-invest-stroy.ru/",
   noindex,
   image = '/images/og-image.jpg',
   type = 'website',

@@ -2,10 +2,7 @@ const PROXY_URL = import.meta.env.VITE_PROXY_URL as string | undefined;
 const TG_TOKEN = import.meta.env.VITE_TG_TOKEN as string | undefined;
 const TG_CHAT = import.meta.env.VITE_TG_CHAT as string | undefined;
 
-/**
- * Отправляет сообщение в Telegram.
- * Приоритет — прокси (безопасно). Если прокси не задан — fallback на прямой токен.
- */
+
 export async function sendToTelegram(text: string): Promise<void> {
   if (PROXY_URL) {
     const res = await fetch(PROXY_URL, {
