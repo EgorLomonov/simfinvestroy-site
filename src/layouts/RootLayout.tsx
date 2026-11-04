@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -13,7 +13,15 @@ export default function RootLayout() {
       <Preloader />
       <Header onOpenModal={() => setModalOpen(true)} />
       <main className="flex-1">
-        <Outlet context={{ openModal: () => setModalOpen(true) }} />
+        <Suspense
+          fallback={
+            <div className="min-h-screen flex items-center justify-center">
+              Загрузка…
+            </div>
+          }
+        >
+          <Outlet context={{ openModal: () => setModalOpen(true) }} />
+        </Suspense>
       </main>
       <Footer />
       <RequestModal open={modalOpen} onClose={() => setModalOpen(false)} />

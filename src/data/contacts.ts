@@ -8,4 +8,4 @@ export const contacts: Contacts = {
   email: 'alim.simf@mail.ru',
   city: 'Симферополь',
   hours: 'Пн.–Сб. 9:00–18:00',
-} as Contacts & { phone1Href: string; phone2Href: string };
+};

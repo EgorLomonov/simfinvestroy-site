@@ -18,31 +18,33 @@ export default function Header({ onOpenModal }: HeaderProps) {
   }, []);
 
   const links = [
-    { href: '#about', label: 'О нас' },
-    { href: '#mision', label: 'Наша миссия' },
+    { href: '/#about', label: 'О нас' },
+    { href: '/#mision', label: 'Наша миссия' },
   ];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-      
-      {/* 1. Верхняя панель (Видна на всех устройствах, адаптирована под мобилки) */}
+      {/* 1. Верхняя панель */}
       <div className="bg-dark/95 text-white/90 backdrop-blur-md border-b border-white/10">
         <div className="container-site flex items-center justify-between py-2 text-sm">
-          
-          {/* Телефоны: на десктопе показываем оба, на мобилке — только иконки */}
           <div className="flex items-center gap-4">
-            <a href={`tel:${contacts.phone1}`} className="flex items-center gap-2 hover:text-white transition">
+            <a
+              href={`tel:${contacts.phone1Href}`}
+              className="flex items-center gap-2 hover:text-white transition"
+            >
               <span className="text-lg">📞</span>
               <span className="hidden sm:inline font-bold">{contacts.phone1}</span>
               <span className="sm:hidden font-bold">Позвонить</span>
             </a>
-            <a href={`tel:${contacts.phone2}`} className="hidden md:flex items-center gap-2 hover:text-white transition">
+            <a
+              href={`tel:${contacts.phone2Href}`}
+              className="hidden md:flex items-center gap-2 hover:text-white transition"
+            >
               <span className="text-lg">📞</span>
               <span className="font-bold">{contacts.phone2}</span>
             </a>
           </div>
 
-          {/* График работы и кнопка заявки */}
           <div className="flex items-center gap-4">
             <span className="hidden md:inline">{contacts.hours}</span>
             <button
@@ -56,11 +58,13 @@ export default function Header({ onOpenModal }: HeaderProps) {
       </div>
 
       {/* 2. Основная панель с логотипом */}
-      <div className={`transition-all duration-300 ${
-        scrolled ? 'bg-dark/90 shadow-lg backdrop-blur-md' : 'bg-transparent'
-      }`}>
+      <div
+        className={`transition-all duration-300 ${
+          scrolled ? 'bg-dark/90 shadow-lg backdrop-blur-md' : 'bg-transparent'
+        }`}
+      >
         <div className="container-site flex items-center justify-between py-3">
-          <a href="#" className="flex-shrink-0">
+          <a href="/" className="flex-shrink-0">
             <img
               src="/images/logo-inverse-310x44.png"
               alt="СимфИнвестСтрой"
@@ -68,7 +72,6 @@ export default function Header({ onOpenModal }: HeaderProps) {
             />
           </a>
 
-          {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-8">
             {links.map((l) => (
               <a
@@ -87,11 +90,12 @@ export default function Header({ onOpenModal }: HeaderProps) {
             </button>
           </nav>
 
-          {/* Mobile toggle */}
           <button
             className="lg:hidden text-white text-3xl p-2"
             onClick={() => setMobileOpen((v) => !v)}
             aria-label="Меню"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-menu"
           >
             {mobileOpen ? '✕' : '☰'}
           </button>
@@ -100,7 +104,10 @@ export default function Header({ onOpenModal }: HeaderProps) {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="lg:hidden bg-white shadow-xl absolute top-full left-0 right-0">
+        <div
+          id="mobile-menu"
+          className="lg:hidden bg-white shadow-xl absolute top-full left-0 right-0"
+        >
           <nav className="container-site flex flex-col py-4 gap-2">
             {links.map((l) => (
               <a
@@ -112,7 +119,7 @@ export default function Header({ onOpenModal }: HeaderProps) {
                 {l.label}
               </a>
             ))}
-            
+
             <button
               onClick={() => {
                 setMobileOpen(false);

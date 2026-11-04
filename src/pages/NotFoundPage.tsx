@@ -4,7 +4,7 @@ import Seo from '../components/Seo';
 export default function NotFoundPage() {
   return (
     <>
-      <Seo title="404 — Страница не найдена" noindex />
+      <Seo title="404 — Страница не найдена" canonical="" noindex />
       <section className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-8xl font-black text-primary">404</h1>

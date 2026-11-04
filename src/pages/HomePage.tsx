@@ -6,11 +6,9 @@ import Gallery from '../components/Gallery';
 import Mission from '../components/Mission';
 import ParallaxCTA from '../components/ParallaxCTA';
 import Faq from '../components/Faq';
-
-import JsonLd from '../components/JsonLd';
 import Seo from '../components/Seo';
-// ...
-<JsonLd />
+import { SITE_URL } from '../data/site';
+
 interface RootContext {
   openModal: () => void;
 }
@@ -21,9 +19,9 @@ export default function HomePage() {
   return (
     <>
       <Seo
-        title="СимфИнвестСтрой — Ремонт квартир под ключ в Симферополе"
+        title="СимфИнвестСтрой — ремонт квартир под ключ в Симферополе"
         description="Комплексный ремонт квартир и коммерческих помещений под ключ. Бесплатный вызов замерщика, гарантия 5 лет, качественные материалы."
-        canonical="https://simfinvestroy.ru/"
+        canonical={`${SITE_URL}/`}
       />
       <HeroSlider onOpenModal={openModal} />
       <Pricing />

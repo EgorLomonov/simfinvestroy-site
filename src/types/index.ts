@@ -33,15 +33,10 @@ export interface FaqItem {
 
 export interface Contacts {
   phone1: string;
+  phone1Href: string;
   phone2: string;
+  phone2Href: string;
   email: string;
   city: string;
   hours: string;
-}
-
-export interface RequestFormData {
-  name: string;
-  phone: string;
-  city: string;
-  kvm: string;
 }

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import RequestForm from './RequestForm';
 
@@ -8,6 +8,8 @@ interface RequestModalProps {
 }
 
 export default function RequestModal({ open, onClose }: RequestModalProps) {
+  const panelRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
@@ -18,9 +20,14 @@ export default function RequestModal({ open, onClose }: RequestModalProps) {
     };
     document.addEventListener('keydown', onEsc);
 
+    const focusTimer = window.setTimeout(() => {
+      panelRef.current?.querySelector<HTMLInputElement>('input')?.focus();
+    }, 50);
+
     return () => {
       document.body.style.overflow = prev;
       document.removeEventListener('keydown', onEsc);
+      window.clearTimeout(focusTimer);
     };
   }, [open, onClose]);
 
@@ -32,8 +39,10 @@ export default function RequestModal({ open, onClose }: RequestModalProps) {
       onClick={onClose}
       role="dialog"
       aria-modal="true"
+      aria-labelledby="request-modal-title"
     >
       <div
+        ref={panelRef}
         className="relative w-full max-w-lg bg-white rounded-card p-6 shadow-cardLg"
         onClick={(e) => e.stopPropagation()}
       >
@@ -47,14 +56,13 @@ export default function RequestModal({ open, onClose }: RequestModalProps) {
         </button>
 
         <div className="text-center mb-2">
-          <img
-            src="/images/sendico.png"
-            alt=""
-            className="w-12 h-12 mx-auto"
-          />
+          <img src="/images/sendico.png" alt="" className="w-12 h-12 mx-auto" />
         </div>
 
-        <h3 className="text-center text-2xl font-bold text-dark mb-2">
+        <h3
+          id="request-modal-title"
+          className="text-center text-2xl font-bold text-dark mb-2"
+        >
           Оставить заявку
         </h3>
         <p className="text-center text-body text-sm">
@@ -63,7 +71,7 @@ export default function RequestModal({ open, onClose }: RequestModalProps) {
 
         <RequestForm
           onSuccess={() => {
-            setTimeout(() => onClose(), 1500);
+            setTimeout(() => onClose(), 3000);
           }}
         />
       </div>

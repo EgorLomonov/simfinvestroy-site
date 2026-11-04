@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { SITE_NAME, SITE_URL } from '../data/site';
 
 interface SeoProps {
   title: string;
@@ -12,13 +13,11 @@ interface SeoProps {
 export default function Seo({
   title,
   description = 'Комплексный ремонт квартир и коммерческих помещений под ключ. Бесплатный вызов замерщика, гарантия 5 лет, качественные материалы.',
-  canonical="https://simf-invest-stroy.ru/",
+  canonical = `${SITE_URL}/`,
   noindex,
-  image = '/images/og-image.jpg',
+  image = `${SITE_URL}/images/og-image.jpg`,
   type = 'website',
 }: SeoProps) {
-  const siteName = 'СимфИнвестСтрой';
-
   return (
     <Helmet>
       <title>{title}</title>
@@ -30,7 +29,7 @@ export default function Seo({
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:type" content={type} />
-      <meta property="og:site_name" content={siteName} />
+      <meta property="og:site_name" content={SITE_NAME} />
       <meta property="og:image" content={image} />
       {canonical && <meta property="og:url" content={canonical} />}
 

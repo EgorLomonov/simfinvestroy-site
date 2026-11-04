@@ -1,83 +1,70 @@
-import { useForm } from 'react-hook-form';
+import { useRef, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
 import {
   requestFormSchema,
   type RequestFormValues,
 } from '../schemas/requestForm';
-import { sendToTelegram } from '../lib/telegram';
+import { sendRequest } from '../lib/requests';
+import { formatPhone } from '../lib/phone';
 
 interface RequestFormProps {
   onSuccess?: () => void;
   onError?: (message: string) => void;
 }
 
-// Улучшенная маска
-function formatPhone(raw: string): string {
-  let digits = raw.replace(/\D/g, '');
-  
-  // Если начинается с 8, меняем на 7
-  if (digits.startsWith('8')) {
-    digits = '7' + digits.slice(1);
-  }
-  // Если не начинается с 7 и не пустая, добавляем 7
-  if (digits.length > 0 && !digits.startsWith('7')) {
-    digits = '7' + digits;
-  }
-
-  digits = digits.slice(0, 11);
-  if (!digits) return '';
-
-  let out = '+7';
-  if (digits.length > 1) out += ` (${digits.slice(1, 4)}`;
-  if (digits.length >= 4) out += `) ${digits.slice(4, 7)}`;
-  if (digits.length >= 7) out += `-${digits.slice(7, 9)}`;
-  if (digits.length >= 9) out += `-${digits.slice(9, 11)}`;
-  return out;
-}
+const DEFAULTS: RequestFormValues = {
+  name: '',
+  phone: '',
+  city: 'Симферополь',
+  kvm: '',
+  website: '',
+  consent: false,
+};
 
 export default function RequestForm({ onSuccess, onError }: RequestFormProps) {
   const [serverError, setServerError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const startedAt = useRef(Date.now());
 
   const {
     register,
+    control,
     handleSubmit,
-    formState: { errors, isSubmitting },
     reset,
-    setValue,
-    watch, // Добавляем watch для отслеживания значения
+    formState: { errors, isSubmitting },
   } = useForm<RequestFormValues>({
     resolver: zodResolver(requestFormSchema),
-    mode: 'onTouched', // Валидация при потере фокуса
-    defaultValues: {
-      name: '',
-      phone: '',
-      city: 'Симферополь',
-      kvm: '',
-    },
+    mode: 'onTouched',
+    defaultValues: DEFAULTS,
   });
-
-  const phoneValue = watch('phone'); // Следим за полем телефона
 
   const submit = async (values: RequestFormValues) => {
     setServerError(null);
+    setSuccess(false);
+
     try {
-      const text =
-        'Заявка с сайта\n' +
-        `Имя: ${values.name}\n` +
-        `Телефон: ${values.phone}\n` +
-        `Город: ${values.city}\n` +
-        `Площадь: ${values.kvm} м²`;
-      await sendToTelegram(text);
+      await sendRequest({
+        name: values.name.trim(),
+        phone: values.phone,
+        city: values.city.trim(),
+        kvm: values.kvm,
+        page: window.location.pathname,
+        ts: startedAt.current,
+        website: values.website,
+      });
+
       setSuccess(true);
-      reset();
+      reset(DEFAULTS);
+      startedAt.current = Date.now();
       onSuccess?.();
-    } catch (e) {
-      console.error(e);
-      const msg = 'Не удалось отправить заявку. Попробуйте ещё раз.';
-      setServerError(msg);
-      onError?.(msg);
+    } catch (error) {
+      const message =
+        error instanceof Error && error.message
+          ? error.message
+          : 'Не удалось отправить заявку. Попробуйте ещё раз.';
+      setServerError(message);
+      onError?.(message);
     }
   };
 
@@ -91,33 +78,39 @@ export default function RequestForm({ onSuccess, onError }: RequestFormProps) {
             className="form-input"
             placeholder="Ваше имя"
             autoComplete="name"
+            maxLength={60}
             disabled={isSubmitting}
+            aria-invalid={!!errors.name}
           />
           {errors.name && (
-            <p className="text-xs text-red-500 mt-1 px-4">
-              {errors.name.message}
-            </p>
+            <p className="text-xs text-red-500 mt-1 px-4">{errors.name.message}</p>
           )}
         </div>
 
         <div>
-          <input
-            {...register('phone')}
-            type="tel"
-            className="form-input"
-            placeholder="+7 (999) 99-99-99"
-            autoComplete="tel"
-            disabled={isSubmitting}
-            value={phoneValue} // Привязываем значение из watch
-            onChange={(e) => {
-              const formatted = formatPhone(e.target.value);
-              setValue('phone', formatted, { shouldValidate: true });
-            }}
+          <Controller
+            control={control}
+            name="phone"
+            render={({ field }) => (
+              <input
+                ref={field.ref}
+                name={field.name}
+                value={field.value}
+                onBlur={field.onBlur}
+                onChange={(event) => field.onChange(formatPhone(event.target.value))}
+                type="tel"
+                inputMode="tel"
+                className="form-input"
+                placeholder="+7 (999) 99-99-99"
+                autoComplete="tel"
+                maxLength={18}
+                disabled={isSubmitting}
+                aria-invalid={!!errors.phone}
+              />
+            )}
           />
           {errors.phone && (
-            <p className="text-xs text-red-500 mt-1 px-4">
-              {errors.phone.message}
-            </p>
+            <p className="text-xs text-red-500 mt-1 px-4">{errors.phone.message}</p>
           )}
         </div>
 
@@ -129,16 +122,16 @@ export default function RequestForm({ onSuccess, onError }: RequestFormProps) {
             placeholder="Ваш город"
             list="cities-list"
             autoComplete="address-level2"
+            maxLength={60}
             disabled={isSubmitting}
+            aria-invalid={!!errors.city}
           />
           <datalist id="cities-list">
             <option value="Симферополь" />
             <option value="Симферопольский район" />
           </datalist>
           {errors.city && (
-            <p className="text-xs text-red-500 mt-1 px-4">
-              {errors.city.message}
-            </p>
+            <p className="text-xs text-red-500 mt-1 px-4">{errors.city.message}</p>
           )}
         </div>
 
@@ -149,13 +142,51 @@ export default function RequestForm({ onSuccess, onError }: RequestFormProps) {
             className="form-input"
             placeholder="Площадь м²"
             min={1}
-            max={999}
+            max={1000}
+            inputMode="numeric"
             disabled={isSubmitting}
+            aria-invalid={!!errors.kvm}
           />
           {errors.kvm && (
-            <p className="text-xs text-red-500 mt-1 px-4">
-              {errors.kvm.message}
-            </p>
+            <p className="text-xs text-red-500 mt-1 px-4">{errors.kvm.message}</p>
+          )}
+        </div>
+
+        {/* Ловушка для ботов: скрытое поле должно остаться пустым */}
+        <div className="hidden" aria-hidden="true">
+          <label>
+            Не заполняйте это поле
+            <input
+              {...register('website')}
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </label>
+        </div>
+
+        <div>
+          <label className="flex items-start gap-2 text-xs text-body cursor-pointer">
+            <input
+              type="checkbox"
+              className="mt-0.5 h-4 w-4 accent-primary"
+              {...register('consent')}
+              disabled={isSubmitting}
+            />
+            <span>
+              Согласен с{' '}
+              <a
+                href="/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary underline"
+              >
+                политикой обработки персональных данных
+              </a>
+            </span>
+          </label>
+          {errors.consent && (
+            <p className="text-xs text-red-500 mt-1 px-1">{errors.consent.message}</p>
           )}
         </div>
 
@@ -167,6 +198,7 @@ export default function RequestForm({ onSuccess, onError }: RequestFormProps) {
             {serverError}
           </p>
         )}
+
         {success && (
           <p
             role="status"

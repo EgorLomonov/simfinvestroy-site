@@ -16,14 +16,13 @@ function FaqRow({ item }: { item: (typeof faqItems)[number] }) {
         <img
           src={item.image}
           alt={item.question}
+          loading="lazy"
           className="w-full h-auto object-cover"
         />
       </div>
       <div className="md:w-1/2 flex flex-col justify-center">
         <h4 className="text-2xl md:text-3xl font-normal text-primary mb-3">
-          <a href="#" className="hover:text-dark transition">
-            {item.question}
-          </a>
+          {item.question}
         </h4>
         <p className="text-lg text-dark leading-relaxed">{item.answer}</p>
       </div>
@@ -33,7 +32,7 @@ function FaqRow({ item }: { item: (typeof faqItems)[number] }) {
 
 export default function Faq() {
   return (
-    <section className="bg-light/80 py-16">
+    <section id="faq" className="bg-light/80 py-16">
       <div className="container-site">
         <h2 className="text-3xl md:text-4xl font-black mb-10 flex items-center gap-3">
           <span className="text-primary text-5xl">📰</span>

@@ -1,23 +1,27 @@
 @import "tailwindcss";
+
 @theme {
-  /* Цвета (вы уже добавили) */
+  /* Цвета */
   --color-primary: #516ca9;
   --color-primary-dark: #384b75;
   --color-dark: #31404a;
+  --color-darker: #2e3844;
   --color-body: #989da7;
   --color-accent: #f16583;
   --color-light: #fafbfc;
+
+  /* Шрифт */
+  --font-sans: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
 
   /* Скругления */
   --radius-pill: 40px;
   --radius-card: 10px;
 
-  /* Тени (если они тоже используются в @apply) */
+  /* Тени */
   --shadow-card: 3px 3px 13px 0 rgba(0, 0, 0, 0.07);
   --shadow-cardLg: 19px 19px 51px 0 rgba(0, 0, 0, 0.08);
   --shadow-soft: 7px 7px 13px 0 rgba(0, 0, 0, 0.05);
 }
-
 
 @layer base {
   html {
@@ -25,7 +29,7 @@
   }
   body {
     @apply font-sans text-body bg-white antialiased;
-    background-image: url('../public/images/background.jpg');
+    background-image: url('/images/background.jpg');
     background-size: cover;
     background-repeat: no-repeat;
   }
@@ -58,6 +62,7 @@
            transition-colors text-base;
   }
 }
+
 /* Стили для кастомной пагинации Swiper */
 .custom-swiper-pagination .swiper-pagination-bullet {
   width: 12px;
@@ -71,7 +76,6 @@
   background-color: #ffffff;
   transform: scale(1.2);
 }
-/* Swiper styles (если используете CDN) */
 .swiper-button-prev, .swiper-button-next { color: #fff; }
 .swiper-pagination-bullet { background: #fff; opacity: .7; }
 .swiper-pagination-bullet-active { opacity: 1; box-shadow: 0 0 0 4px rgba(255,255,255,.3); }
