@@ -6,12 +6,12 @@ export default function ParallaxCTA({ onOpenModal }: ParallaxCTAProps) {
   return (
     <section
       className="relative py-24 text-center text-white bg-fixed bg-cover bg-center"
-      style={{ backgroundImage: 'url(/images/parallax-1-1920x1026.jpg)' }}
+      style={{ backgroundImage: 'url(/images/parallax-1-1920x1026.webp)' }}
     >
       <div className="absolute inset-0 bg-black/50" />
       <div className="container-site relative">
-        <h2 className="text-3xl md:text-5xl font-black mb-4">
-          Оставьте <span className="font-light">заявку</span>
+        <h2 className="text-3xl md:text-5xl font-black mb-4 text-white drop-shadow-lg">
+          Оставьте <span className="font-light text-white/80">заявку</span>
         </h2>
         <p className="text-lg md:text-xl max-w-3xl mx-auto">
           С вами свяжется наш замерщик и приедет в удобное время. Мы составим

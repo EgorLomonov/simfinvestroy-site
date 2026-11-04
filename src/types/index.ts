@@ -38,5 +38,8 @@ export interface Contacts {
   phone2Href: string;
   email: string;
   city: string;
+  address: string;
+  inn: string;
+  owner: string;
   hours: string;
 }

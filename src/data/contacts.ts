@@ -7,5 +7,8 @@ export const contacts: Contacts = {
   phone2Href: '+79787856008',
   email: 'alim.simf@mail.ru',
   city: 'Симферополь',
+  address: 'г. Симферополь, ул. Механизаторов, 66',
+  inn: '910206171040',
+  owner: 'Эюпов Алим Диляверович',
   hours: 'Пн.–Сб. 9:00–18:00',
 };

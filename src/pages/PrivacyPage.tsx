@@ -31,8 +31,11 @@ export default function PrivacyPage() {
               <p>
                 Настоящая Политика определяет порядок обработки персональных
                 данных посетителей сайта {SITE_URL} (далее — Сайт). Оператор
-                персональных данных — компания «СимфИнвестСтрой» (далее —
+                персональных данных — Эюпов Алим Диляверович (далее —
                 Оператор).
+              </p>
+              <p>
+                ИНН: {contacts.inn}. Адрес: {contacts.address}.
               </p>
               <p>
                 Отправляя заявку через форму на Сайте и отмечая согласие,
@@ -152,7 +155,8 @@ export default function PrivacyPage() {
                 <a href={`mailto:${contacts.email}`} className="text-primary underline">
                   {contacts.email}
                 </a>
-                , телефоны: {contacts.phone1}, {contacts.phone2}.
+                , телефоны: {contacts.phone1}, {contacts.phone2}. Адрес:{' '}
+                {contacts.address}.
               </p>
             </section>
           </div>

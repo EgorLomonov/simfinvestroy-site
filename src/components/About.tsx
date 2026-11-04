@@ -30,8 +30,12 @@ export default function About() {
           }`}
         >
           <img
-            src="/images/index-874x534.jpg"
+            src="/images/index-874x534.webp"
             alt="О нас"
+            width={874}
+            height={534}
+            loading="lazy"
+            decoding="async"
             className="w-full h-auto"
           />
         </div>

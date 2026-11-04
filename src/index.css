@@ -6,7 +6,7 @@
   --color-primary-dark: #384b75;
   --color-dark: #31404a;
   --color-darker: #2e3844;
-  --color-body: #989da7;
+  --color-body: #6b7280;
   --color-accent: #f16583;
   --color-light: #fafbfc;
 
@@ -29,7 +29,7 @@
   }
   body {
     @apply font-sans text-body bg-white antialiased;
-    background-image: url('/images/background.jpg');
+    background-image: url('/images/background.webp');
     background-size: cover;
     background-repeat: no-repeat;
   }

@@ -12,7 +12,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm font-bold">
               <li className="flex items-start gap-3">
                 <span className="text-primary text-lg">📍</span>
-                <span>{contacts.city}</span>
+                <span>{contacts.address}</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-primary text-lg">📞</span>
@@ -84,6 +84,8 @@ export default function Footer() {
             >
               Подробнее о нас →
             </a>
+            <p className="mt-6 text-sm font-bold text-white">{contacts.owner}</p>
+            <p className="text-xs text-gray-400">ИНН {contacts.inn}</p>
           </div>
         </div>
       </div>
